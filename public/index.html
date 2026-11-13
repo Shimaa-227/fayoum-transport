@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز مواصلات جامعة الفيوم</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { text-align: center; color: #1a3c6c; margin-bottom: 5px;}
+        p.subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px;}
+        label { display: block; margin-top: 10px; font-weight: bold; font-size: 14px; color: #333;}
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-family: inherit;}
+        button { width: 100%; padding: 14px; background: #1a3c6c; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 20px; transition: 0.3s;}
+        button:hover { background: #122a4d; }
+        #msg { text-align: center; margin-top: 15px; font-weight: bold; display: none; padding: 10px; border-radius: 5px;}
+        .success { background: #d4edda; color: #155724; display: block !important;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🚌 مواصلات جامعة الفيوم</h2>
+        <p class="subtitle">سجل رحلتك الآن بسهولة</p>
+        
+        <form id="bookingForm">
+            <label>الاسم بالكامل</label>
+            <input type="text" id="name" placeholder="اكتب اسمك" required>
+            
+            <label>رقم الموبايل</label>
+            <input type="tel" id="phone" placeholder="01xxxxxxxxx" required>
+            
+            <label>اختر الخط</label>
+            <select id="route" required>
+                <option value="">-- اختر المدينة --</option>
+                <option value="طامية">طامية (22 كم)</option>
+                <option value="سنورس">سنورس (18 كم)</option>
+                <option value="إطسا">إطسا (5 كم)</option>
+                <option value="الفيوم">الفيوم سيتي (5 كم)</option>
+                <option value="أبشواي يوسف الصديق">أبشواي يوسف الصديق (28 كم)</option>
+                <option value="أبشواي">أبشواي (20 كم)</option>
+            </select>
+
+            <label>نوع الرحلة</label>
+            <select id="tripType" required>
+                <option value="ذهاب وعودة">ذهاب وعودة</option>
+                <option value="ذهاب فقط">ذهاب فقط</option>
+                <option value="عودة فقط">عودة فقط</option>
+            </select>
+
+            <label>نوع المركبة</label>
+            <select id="vehicleType" required>
+                <option value="أوتوبيس">أوتوبيس</option>
+                <option value="ميكروباص">ميكروباص</option>
+                <option value="ملاكي (مشاركة)">ملاكي (مشاركة)</option>
+            </select>
+
+            <label>تاريخ الرحلة</label>
+            <input type="date" id="date" required>
+
+            <label>وقت الرحلة (تقريبي)</label>
+            <input type="time" id="time" required>
+            
+            <button type="submit">تأكيد الحجز</button>
+        </form>
+        <div id="msg"></div>
+    </div>
+
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                route: document.getElementById('route').value,
+                tripType: document.getElementById('tripType').value,
+                vehicleType: document.getElementById('vehicleType').value,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value
+            };
+
+            try {
+                const response = await fetch('/api/book', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const msg = document.getElementById('msg');
+                msg.className = 'success';
+                msg.innerText = '✅ تم تسجيل الحجز بنجاح!';
+                document.getElementById('bookingForm').reset();
+            } catch (error) {
+                alert("حدث خطأ في الاتصال بالسيرفر");
+            }
+        });
+    </script>
+</body>
+</html>
