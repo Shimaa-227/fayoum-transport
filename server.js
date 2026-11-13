@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 
 // ⚠️ استبدلي الرابط اللي تحت ده بالرابط بتاعك من MongoDB
 // (الرابط ده هو اللي إنتي عملتيه في الخطوات اللي فاتت)
-const MONGODB_URI = 'mongodb+srv://<sh1maaashour08_db_user>:<ZYy1pwrufobHoDyw>@cluster0.45onjik.mongodb.net/';
+const MONGODB_URI = 'mongodb+srv://shimaaashour08_db_user:shimaa123@cluster0.45onj1k.mongodb.net/?retryWrites=true&w=majority';
 
 app.use(cors());
 app.use(bodyParser.json());
