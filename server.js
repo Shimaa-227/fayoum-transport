@@ -7,17 +7,20 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ⚠️ هنا هنحط الرابط بتاعك (شوفي الخطوة اللي تحت)
+// ⚠️ استبدلي الرابط اللي تحت ده بالرابط بتاعك من MongoDB
+// (الرابط ده هو اللي إنتي عملتيه في الخطوات اللي فاتت)
 const MONGODB_URI = 'mongodb+srv://<sh1maaashour08_db_user>:<ZYy1pwrufobHoDyw>@cluster0.45onjik.mongodb.net/';
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// الاتصال بقاعدة البيانات
 mongoose.connect(MONGODB_URI)
     .then(() => console.log('✅ Connected to MongoDB Atlas'))
     .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
+// تعريف شكل البيانات
 const bookingSchema = new mongoose.Schema({
     name: String,
     phone: String,
@@ -31,6 +34,7 @@ const bookingSchema = new mongoose.Schema({
 
 const Booking = mongoose.model('Booking', bookingSchema);
 
+// API: استقبال حجز جديد
 app.post('/api/book', async (req, res) => {
     try {
         const newBooking = new Booking(req.body);
@@ -42,6 +46,7 @@ app.post('/api/book', async (req, res) => {
     }
 });
 
+// API: عرض الحجوزات
 app.get('/api/bookings', async (req, res) => {
     try {
         const bookings = await Booking.find().sort({ createdAt: -1 });
@@ -51,6 +56,7 @@ app.get('/api/bookings', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`السيرفر شغال على http://localhost:${PORT}`);
+// ⚠️ أهم سطر عشان Railway يشتغل: ضفنا '0.0.0.0'
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`السيرفر شغال على بورت ${PORT}`);
 });
